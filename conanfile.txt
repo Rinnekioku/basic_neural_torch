@@ -1,5 +1,6 @@
 [requires]
 opencv/4.5.3
+gtest/cci.20210126
 
 [generators]
 cmake

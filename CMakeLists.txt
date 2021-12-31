@@ -1,14 +1,17 @@
 
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 project(torch-demo)
 include(FetchContent)
+include(GoogleTest)
 
 set(CMAKE_C_COMPILER /usr/bin/clang-12)
 set(CMAKE_CXX_COMPILER /usr/bin/clang++-12)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -D_GLIBCXX_USE_CXX11_ABI=0")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0")
 set(FETCHCONTENT_QUIET OFF)
+
+option(BUILD_SHARED_LIBS ON)
 
 FetchContent_Declare(
   libtorch
@@ -23,5 +26,14 @@ find_package(Torch REQUIRED)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
+add_subdirectory(${CMAKE_SOURCE_DIR}/modules/classification)
+
+set(TORCH_DEMO_LIBS
+  classification-module
+  ${TORCH_LIBRARIES}
+  ${CONAN_LIBS}
+)
+
 add_executable(torch-demo torch-demo.cpp)
-target_link_libraries(torch-demo PRIVATE ${CONAN_LIBS} ${TORCH_LIBRARIES})
+
+target_link_libraries(torch-demo PUBLIC ${TORCH_DEMO_LIBS})
