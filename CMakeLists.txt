@@ -18,7 +18,13 @@ FetchContent_Declare(
   URL https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.10.1%2Bcpu.zip
 )
 
-FetchContent_MakeAvailable(libtorch)
+FetchContent_Declare(
+  dataset
+  URL https://github.com/Rinnekioku/datasets/raw/master/dbg_dataset.tar.gz
+  SOURCE_DIR dbg_dataset
+)
+
+FetchContent_MakeAvailable(libtorch dataset)
 
 list(APPEND CMAKE_PREFIX_PATH ${libtorch_SOURCE_DIR})
 find_package(Torch REQUIRED)
