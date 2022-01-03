@@ -15,7 +15,7 @@ set(CLASSIFICATION_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 set(CLASSIFICATION_TESTS
-    ${PROJECT_NAME}-test
+    ${PROJECT_NAME}-tests
 )
 
 
@@ -33,8 +33,6 @@ find_package(Torch REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${TORCH_LIBRARIES} ${CONAN_LIBS})
 
-enable_testing()
-
 add_executable(${CLASSIFICATION_TESTS} 
     ${CMAKE_CURRENT_SOURCE_DIR}/test/classifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/dataset.cpp)
@@ -42,3 +40,7 @@ add_executable(${CLASSIFICATION_TESTS}
 target_link_libraries(${CLASSIFICATION_TESTS} PRIVATE ${PROJECT_NAME} ${TORCH_LIBRARIES} ${CONAN_LIBS})
 
 gtest_discover_tests(${CLASSIFICATION_TESTS})
+
+add_custom_target(run-${CLASSIFICATION_TESTS}
+                  COMMAND ${CLASSIFICATION_TESTS}
+                  COMMENT "Running ${CLASSIFICATION_TESTS}...")

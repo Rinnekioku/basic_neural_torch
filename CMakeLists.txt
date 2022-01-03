@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 project(torch-demo)
 include(FetchContent)
@@ -11,8 +10,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0")
 set(FETCHCONTENT_QUIET OFF)
 
-option(BUILD_SHARED_LIBS ON)
-
 FetchContent_Declare(
   libtorch
   URL https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.10.1%2Bcpu.zip
@@ -20,8 +17,9 @@ FetchContent_Declare(
 
 FetchContent_Declare(
   dataset
-  URL https://github.com/Rinnekioku/datasets/raw/master/dbg_dataset.tar.gz
-  SOURCE_DIR dbg_dataset
+  URL https://github.com/Rinnekioku/datasets/raw/master/geometric-shapes/validate.tar.gz
+  SOURCE_DIR data/geometric-shapes/validate/
+  BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 FetchContent_MakeAvailable(libtorch dataset)
@@ -40,6 +38,11 @@ set(TORCH_DEMO_LIBS
   ${CONAN_LIBS}
 )
 
-add_executable(torch-demo torch-demo.cpp)
+enable_testing()
 
-target_link_libraries(torch-demo PUBLIC ${TORCH_DEMO_LIBS})
+add_executable(${PROJECT_NAME} 
+  ${CMAKE_CURRENT_SOURCE_DIR}/torch-demo.cpp)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC ${TORCH_DEMO_LIBS})
+
+add_dependencies(${PROJECT_NAME} run-classification-module-tests)
