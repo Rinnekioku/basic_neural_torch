@@ -2,11 +2,13 @@
 #define CLASSIFICATION_CLASSIFIER_MODULE_H_
 
 #include <torch/torch.h>
-#include "model.h"
+
 #include <memory>
 #include <opencv2/opencv.hpp>
 #include <string>
 #include <tuple>
+
+#include "model.h"
 
 namespace classification {
 
@@ -19,8 +21,7 @@ class Classifier {
   Classifier(std::string model_path, ModelParams... model_params);
 
   template <typename... ModelParams>
-  void LoadModel(ModuleType const model,
-                 ModelParams... model_params);
+  void LoadModel(ModuleType const model, ModelParams... model_params);
   template <typename... ModelParams>
   void LoadModel(std::string model_path, ModelParams... model_params);
 
